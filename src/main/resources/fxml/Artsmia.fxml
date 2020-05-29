@@ -55,7 +55,7 @@
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <ComboBox fx:id="boxRuolo" prefHeight="27.0" prefWidth="150.0" GridPane.columnIndex="1" />
+                  <ComboBox fx:id="boxRuolo" onMouseClicked="#popolaTendina" prefHeight="27.0" prefWidth="150.0" GridPane.columnIndex="1" />
                   <Label text="Artista (id)" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets right="10.0" />

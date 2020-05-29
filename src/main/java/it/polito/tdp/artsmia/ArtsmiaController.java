@@ -10,6 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+
 
 public class ArtsmiaController {
 	
@@ -31,7 +33,7 @@ public class ArtsmiaController {
     private Button btnCalcolaPercorso;
 
     @FXML
-    private ComboBox<?> boxRuolo;
+    private ComboBox<String> boxRuolo;
 
     @FXML
     private TextField txtArtista;
@@ -42,7 +44,14 @@ public class ArtsmiaController {
     @FXML
     void doArtistiConnessi(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Calcola artisti connessi");
+        String result = this.model.getArtistiConnessi();
+    	
+    	if(result!=null) {
+    		txtResult.appendText(result);
+    	}else {
+    		txtResult.appendText("Generare prima un grafo!");
+    		return;
+    	}
     }
 
     @FXML
@@ -54,8 +63,24 @@ public class ArtsmiaController {
     @FXML
     void doCreaGrafo(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Crea grafo");
+    	
+    	String ruolo = this.boxRuolo.getValue();
+    	
+    	if(ruolo!=null) {
+    		this.model.generateGraph(ruolo);
+    		txtResult.appendText("Grafo creato!\nNumero vertici: "+this.model.getNumVertici()+"\nNumero archi: "+this.model.getNumArchi());
+    	}else {
+    		txtResult.appendText("Inserire un ruolo dal menù a tendina!");
+    		return;
+    	}
+    
     }
+    
+    @FXML
+    void popolaTendina(MouseEvent event) {
+    	this.boxRuolo.getItems().addAll(this.model.getAllRoles());
+    }
+    
 
     public void setModel(Model model) {
     	this.model = model;
