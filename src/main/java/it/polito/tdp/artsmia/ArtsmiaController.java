@@ -3,6 +3,7 @@ package it.polito.tdp.artsmia;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.artsmia.model.Artist;
 import it.polito.tdp.artsmia.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -57,7 +58,19 @@ public class ArtsmiaController {
     @FXML
     void doCalcolaPercorso(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Calcola percorso");
+    	try {
+    		int codiceArtista = Integer.parseInt(this.txtArtista.getText());
+    		Artist artista = this.model.controllaCodiceInserito(codiceArtista);
+    		if(artista!=null) {
+    			this.txtResult.appendText("Codice selezionato: "+codiceArtista+"\n"+this.model.cercaPercorso(artista));
+    		}else {
+    			this.txtResult.appendText("Codice selezionato non presente nel grafo!");
+    		}
+    		
+    	}catch(NumberFormatException e) {
+    		txtResult.appendText("Inserire uno dei codici artista presenti nella Text Area!");
+    	}
+    	
     }
 
     @FXML
@@ -78,12 +91,13 @@ public class ArtsmiaController {
     
     @FXML
     void popolaTendina(MouseEvent event) {
-    	this.boxRuolo.getItems().addAll(this.model.getAllRoles());
+    	return;
     }
     
 
     public void setModel(Model model) {
     	this.model = model;
+        this.boxRuolo.getItems().addAll(this.model.getAllRoles());
     }
 
     

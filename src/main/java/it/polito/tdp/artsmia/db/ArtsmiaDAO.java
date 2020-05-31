@@ -150,4 +150,35 @@ public class ArtsmiaDAO {
 		}
 	}
 	
+	public List<Integer> listaPesiNelGrafo(String ruolo, Map<Integer, Artist> mappaArtisti) {
+
+		String sql = "SELECT DISTINCT COUNT(DISTINCT eo2.exhibition_id) AS peso " + 
+				"FROM exhibition_objects AS eo1, exhibition_objects AS eo2, authorship AS au1, authorship AS au2 " + 
+				"WHERE au1.object_id = eo1.object_id AND au2.object_id = eo2.object_id  " + 
+				"AND au1.artist_id!=au2.artist_id AND eo2.exhibition_id=eo1.exhibition_id " + 
+				"AND au2.role=? AND au1.role=? " + 
+				"GROUP BY au1.object_id, au2.object_id "+
+				"ORDER BY peso DESC ";
+		
+		List<Integer> result = new ArrayList<>();
+		Connection conn = DBConnect.getConnection();
+
+		try {
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setString(1, ruolo);
+			st.setString(2, ruolo);
+			ResultSet res = st.executeQuery();
+			while (res.next()) {
+				
+				result.add(res.getInt("peso"));
+			}
+			conn.close();
+			return result;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 }
